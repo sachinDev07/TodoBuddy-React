@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import Todo from './components/Todo'
+import Header from './components/Header'
 
 function App() {
 
   return (
-    <>
-      <h1 className="text-red-600">Project start</h1>
-    </>
+    <div>
+      <Header />
+    </div>
   )
 }
 
