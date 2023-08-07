@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const DatePickerComponent = ({selectedDate, handleDateChange}) => {
+const DatePickerComponent = ({ selectedDate, handleDateChange }) => {
   return (
     <>
       <DatePicker
