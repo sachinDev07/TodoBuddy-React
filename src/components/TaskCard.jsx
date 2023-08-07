@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
-const TaskCard = () => {
+import DatePickerComponent from "./DatePicker";
+import TimePicker from "./TimePicker";
+
+const TaskCard = ({ onSubmitTask }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [priority, setPriority] = useState("");
   const [category, setCategory] = useState("");
+
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+
   const [inputFocused, setInputFocused] = useState(false);
   const [taskData, setTaskData] = useState({
     name: "",
@@ -13,8 +18,6 @@ const TaskCard = () => {
   });
 
   const { name, description } = taskData;
-
-  console.log(category);
 
   const onChange = (e) => {
     setTaskData((prevState) => ({
@@ -36,19 +39,62 @@ const TaskCard = () => {
   };
 
   const handlePriority = (selectedPriority) => {
-    setPriority(priority);
+    setPriority(selectedPriority);
   };
 
   const handleCategory = (selectedCategory) => {
     setCategory(selectedCategory);
   };
 
-  const onSubmit = () => {};
+  const handleStartTimeChange = (date) => {
+    setStartTime(date);
+  };
+
+  const handleEndTimeChange = (date) => {
+    setEndTime(date);
+  };
 
   const isInputFocused = (inputId) => inputId === inputFocused;
 
+  const formatDate = (date) => {
+    const today = new Date();
+    const selected = new Date(date);
+
+    if (selected.toDateString() === today.toDateString()) {
+      return "Today";
+    } else {
+      return selected.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    }
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const onSubmit = () => {
+    const taskDetails = {
+      name,
+      description,
+      priority,
+      category,
+      date: formatDate(selectedDate),
+      startTime: formatTime(startTime),
+      endTime: formatTime(endTime),
+    };
+    onSubmitTask(taskDetails);
+
+    setTaskData({ name: "", description: "" });
+    setPriority("");
+    setCategory("");
+    setSelectedDate(new Date());
+  };
+
   return (
-    <section className="relative  max-w-[480px] min-w-[480px] shadow-2xl mt-8 rounded">
+    <section className="relative max-w-[480px] min-w-[480px] shadow-2xl rounded">
       <div className="p-8">
         <div className="">
           <label
@@ -91,7 +137,26 @@ const TaskCard = () => {
             focus:border-gray-700"
           />
         </div>
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-5 flex  space-x-28">
+          <label className="block text-gray-700 font-bold text-lg">Date:</label>
+          <DatePickerComponent
+            selectedDate={selectedDate}
+            handleDateChange={handleDateChange}
+          />
+        </div>
+        <div className="flex justify-between">
+          <TimePicker
+            label="Start Time"
+            selectedTime={startTime}
+            onTimeChange={handleStartTimeChange}
+          />
+          <TimePicker
+            label="End Time"
+            selectedTime={endTime}
+            onTimeChange={handleEndTimeChange}
+          />
+        </div>
+        <div className="mt-3 flex justify-between items-center">
           <label className="text-gray-700 font-bold text-lg">Priority</label>
           <div className="flex items-center space-x-4">
             <p
@@ -100,7 +165,7 @@ const TaskCard = () => {
               className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
             >
               High
-              <div className="w-4 h-4 rounded-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600"></div>
+              <span className="w-4 h-4 rounded-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600"></span>
             </p>
             <p
               id="Medium"
@@ -108,7 +173,7 @@ const TaskCard = () => {
               className="flex items-center gap-1 text-xm font-semibold text-gray-700 cursor-pointer"
             >
               Medium
-              <div className="w-4 h-4 rounded-full bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600"></div>
+              <span className="w-4 h-4 rounded-full bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600"></span>
             </p>
             <p
               id="Low"
@@ -116,7 +181,7 @@ const TaskCard = () => {
               className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
             >
               Low
-              <div className="w-4 h-4 rounded-full bg-gray-400 hover:bg-gray-500 active:bg-gray-600"></div>
+              <span className="w-4 h-4 rounded-full bg-gray-400 hover:bg-gray-500 active:bg-gray-600"></span>
             </p>
           </div>
         </div>
@@ -134,16 +199,7 @@ const TaskCard = () => {
             </span>
           </div>
         </div>
-        <div className="mt-5 flex  space-x-28">
-          <label className="block text-gray-700 font-bold text-lg">Date:</label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
-            dateFormat="dd-MM-yyyy"
-            className="w-full mt-1 font-bold outline-none text-lg text-gray-700 border-b-2 border-spacing-x-2 border-gray-300 bg-white transition duration-150 ease-in-out focus:border-gray-700 focus:text-gray-700 mb-6"
-          />
-        </div>
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-6 flex items-center justify-between">
           <label className="text-lg font-bold text-gray-700">Category</label>
           <div className="flex space-x-4">
             <span
@@ -172,11 +228,12 @@ const TaskCard = () => {
             </span>
           </div>
         </div>
-        <div className="flex justify-end mt-12">
+
+        <div className="flex justify-end mt-8">
           <button
             type="button"
             onClick={onSubmit}
-            className=" right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
+            className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
           >
             Done
           </button>
