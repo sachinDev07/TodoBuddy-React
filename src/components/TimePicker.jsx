@@ -18,7 +18,8 @@ const TimePicker = ({ label, selectedTime, onTimeChange }) => {
         onChange={(date) => onTimeChange(date)}
         showTimeSelect
         showTimeSelectOnly
-        timeIntervals={15}
+        required
+        timeIntervals={30}
         dateFormat="h:mm aa"
         className="border-2 rounded p-2"
       />

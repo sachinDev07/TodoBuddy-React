@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
 
-const TodoList = ({ task }) => {
+const TodoList = ({ task, onDelete }) => {
   const [truncateText, setTruncateText] = useState("");
-  const { name, startTime, endTime, date } = task;
+  const { id, name, startTime, endTime, date } = task;
 
   useEffect(() => {
     if (name.length > 30) {
@@ -39,6 +39,7 @@ const TodoList = ({ task }) => {
           />
           <p
             title="Remove"
+            onClick={() => onDelete(id)}
             className="cursor-pointer font-bold text-lg text-red-700 hover:text-red-500 transition duration-150 ease-in-out"
           >
             X

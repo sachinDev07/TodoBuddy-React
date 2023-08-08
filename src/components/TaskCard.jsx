@@ -94,8 +94,8 @@ const TaskCard = ({ onSubmitTask }) => {
   };
 
   return (
-    <section className="relative max-w-[480px] min-w-[480px] shadow-2xl rounded">
-      <div className="p-8">
+    <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-2xl rounded">
+      <form onSubmit={onSubmit} className="p-8">
         <div className="">
           <label
             className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
@@ -113,6 +113,9 @@ const TaskCard = ({ onSubmitTask }) => {
             onFocus={() => handleFocus("taskname")}
             onBlur={handleBlur}
             onChange={onChange}
+            minLength={3}
+            maxLength={30}
+            required
             className="w-full mt-1 font-bold outline-none text-lg text-gray-700 border-b-2 border-spacing-x-2 border-gray-300 bg-white transition duration-150 ease-in-out focus:border-gray-700 focus:text-gray-700 mb-6"
           />
         </div>
@@ -133,6 +136,9 @@ const TaskCard = ({ onSubmitTask }) => {
             onFocus={() => handleFocus("description")}
             onBlur={handleBlur}
             onChange={onChange}
+            minLength={5}
+            maxLength={70}
+            required
             className="w-full outline-none text-gray-700 border-b-2 border-gray-300 font-bold text-lg
             focus:border-gray-700"
           />
@@ -228,17 +234,15 @@ const TaskCard = ({ onSubmitTask }) => {
             </span>
           </div>
         </div>
-
         <div className="flex justify-end mt-8">
           <button
-            type="button"
-            onClick={onSubmit}
+            type="submit"
             className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
           >
             Done
           </button>
         </div>
-      </div>
+      </form>
     </section>
   );
 };
