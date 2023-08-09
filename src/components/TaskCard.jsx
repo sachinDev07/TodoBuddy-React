@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DatePickerComponent from "./DatePicker";
 import TimePicker from "./TimePicker";
 
-const TaskCard = ({ onSubmitTask }) => {
+const TaskCard = ({ onSubmitTask, editingTask, onUpdate }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [priority, setPriority] = useState("");
   const [category, setCategory] = useState("");
@@ -18,6 +18,22 @@ const TaskCard = ({ onSubmitTask }) => {
   });
 
   const { name, description } = taskData;
+
+  useEffect(() => {
+    if (editingTask) {
+      setTaskData({
+        name: editingTask.name,
+        description: editingTask.description,
+      });
+
+      // setSelectedDate(new Date(editingTask.date));
+      // setStartTime(new Date(editingTask.startTime));
+      // setEndTime(new Date(editingTask.endTime));
+
+      setPriority(editingTask.priority);
+      setCategory(editingTask.category);
+    }
+  }, [editingTask]);
 
   const onChange = (e) => {
     setTaskData((prevState) => ({
@@ -85,7 +101,12 @@ const TaskCard = ({ onSubmitTask }) => {
       startTime: formatTime(startTime),
       endTime: formatTime(endTime),
     };
-    onSubmitTask(taskDetails);
+
+    if (editingTask) {
+      onUpdate(editingTask.id, taskDetails);
+    } else {
+      onSubmitTask(taskDetails);
+    }
 
     setTaskData({ name: "", description: "" });
     setPriority("");
@@ -235,12 +256,23 @@ const TaskCard = ({ onSubmitTask }) => {
           </div>
         </div>
         <div className="flex justify-end mt-8">
-          <button
-            type="submit"
-            className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
-          >
-            Done
-          </button>
+          {editingTask ? (
+            <button
+              onClick={onSubmit}
+              // editingTask={editingTask}
+              type="button"
+              className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-green-400 hover:bg-green-500 transition duration-150 ease-in-out active:bg-green-400 active:text-white"
+            >
+              Edit
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
+            >
+              Done
+            </button>
+          )}
         </div>
       </form>
     </section>

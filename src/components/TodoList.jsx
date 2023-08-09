@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
 
-const TodoList = ({ task, onDelete }) => {
+const TodoList = ({ task, onDelete, onEdit }) => {
   const [truncateText, setTruncateText] = useState("");
   const { id, name, startTime, endTime, date } = task;
 
@@ -35,6 +35,7 @@ const TodoList = ({ task, onDelete }) => {
         <div className="flex space-x-3 items-center">
           <AiFillEdit
             title="Edit"
+            onClick={() => onEdit(id)}
             className="cursor-pointer font-bold text-lg text-green-700 hover:text-green-600 transition duration-150 ease-in-out"
           />
           <p
