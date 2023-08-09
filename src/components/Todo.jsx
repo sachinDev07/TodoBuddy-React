@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { BsChevronDown } from "react-icons/bs";
 
 import TaskCard from "./TaskCard";
 import TodoList from "./TodoList";
@@ -19,7 +18,7 @@ const Todo = () => {
 
   const handleSubmitTask = (taskDetails) => {
     const taskId = Date.now();
-    const updatedTaskData = [...storedTaskData, { id: taskId, ...taskDetails }];
+    const updatedTaskData = [{ id: taskId, ...taskDetails }, ...storedTaskData];
     setStoredTaskData(updatedTaskData);
     localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
     setCardShow(false);
@@ -49,6 +48,52 @@ const Todo = () => {
 
   const clearLocalStorage = () => {
     localStorage.clear();
+    setStoredTaskData([]);
+  };
+
+  const onFilterTasks = (type) => {
+    if (type === "sort") {
+      const userSortValue = document.getElementById("sort");
+      let sortValue = userSortValue.options[userSortValue.selectedIndex].value;
+
+      let sortedTaskData = [...storedTaskData];
+
+      if (sortValue === "date") {
+        sortedTaskData.sort((taskA, taskB) => {
+          if (taskA.date === "Today" && taskB.date === "Today") {
+            // If both tasks have "Today" as the date, compare their IDs to maintain order
+            return taskA.id - taskB.id;
+          } else if (taskA.date === "Today") {
+            return -1; // taskA should come first
+          } else if (taskB.date === "Today") {
+            return 1; // taskB should come first
+          } else {
+            // Compare dates for tasks other than "Today"
+            const dateA = new Date(taskA.date);
+            const dateB = new Date(taskB.date);
+            return dateA - dateB;
+          }
+        });
+      }
+
+      if (sortValue === "aToz") {
+        sortedTaskData.sort((taskA, taskB) => {
+          const nameA = String(taskA.name).toLowerCase();
+          const nameB = String(taskB.name).toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
+      }
+
+      if (sortValue === "zToa") {
+        sortedTaskData.sort((taskA, taskB) => {
+          const nameA = String(taskA.name).toLowerCase();
+          const nameB = String(taskB.name).toLowerCase();
+          return nameB.localeCompare(nameA);
+        });
+      }
+
+      setStoredTaskData(sortedTaskData);
+    }
   };
 
   return (
@@ -63,21 +108,41 @@ const Todo = () => {
             Add New Task
           </button>
           <div className="flex items-center space-x-6 text-gray-700 font-semibold ">
-            <button className="flex items-center">
-              Sort <BsChevronDown className="ml-1 text-black" />
-            </button>
-            <button className="flex items-center">
-              Filter <BsChevronDown className="ml-1 text-black" />
-            </button>
-            <button className="flex items-center">
-              Category <BsChevronDown className="ml-1 text-black" />
-            </button>
+            <form className="flex space-x-3">
+              <select
+                name="sort"
+                id="sort"
+                onChange={() => onFilterTasks("sort")}
+                className="cursor-pointer"
+              >
+                <option value="">Sort</option>
+                <option value="date">Date</option>
+                <option value="aToz">A-Z</option>
+                <option value="zToa">Z-A</option>
+              </select>
+              <select name="priority" id="priority" className="cursor-pointer">
+                <option value="">Filter</option>
+                <option value="completed">Complete</option>
+                <option value="pending">Pending</option>
+                <option value="hard">Hard</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+              <select name="category" id="category" className="cursor-pointer">
+                <option value="">Category</option>
+                <option value="personal">Personal</option>
+                <option value="study">Study</option>
+                <option value="home">Home</option>
+                <option value="shopping">Shopping</option>
+              </select>
+            </form>
           </div>
         </div>
 
         <div className="flex justify-end mt-12 my-2">
           <button
             onClick={clearLocalStorage}
+            title="Clear all the tasks"
             className=" text-gray-700 font-semibold px-2 py-2 bg-gray-300 rounded-md hover:bg-gray-200 active:bg-gray-300 border border-gray-300 transition duration-150 ease-in-out"
           >
             Clear All
