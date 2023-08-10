@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
+import { RxCross2 } from "react-icons/rx";
 
 const TodoList = ({ task, onDelete, onEdit }) => {
   const [truncateText, setTruncateText] = useState("");
@@ -38,13 +39,11 @@ const TodoList = ({ task, onDelete, onEdit }) => {
             onClick={() => onEdit(id)}
             className="cursor-pointer font-bold text-lg text-green-700 hover:text-green-600 transition duration-150 ease-in-out"
           />
-          <p
+          <RxCross2
             title="Remove"
             onClick={() => onDelete(id)}
             className="cursor-pointer font-bold text-lg text-red-700 hover:text-red-500 transition duration-150 ease-in-out"
-          >
-            X
-          </p>
+          />
         </div>
       </div>
     </div>

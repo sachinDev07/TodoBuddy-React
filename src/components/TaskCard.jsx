@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, memo, useContext } from "react";
 import DatePickerComponent from "./DatePicker";
 import TimePicker from "./TimePicker";
+import Button from "./Button";
+import { BgOverlayContext } from "../BgOverlayContext";
 
-const TaskCard = ({ onSubmitTask, editingTask, onUpdate }) => {
+const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate }) => {
+  const { setOverlay } = useContext(BgOverlayContext);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [priority, setPriority] = useState("");
   const [category, setCategory] = useState("");
@@ -91,37 +93,44 @@ const TaskCard = ({ onSubmitTask, editingTask, onUpdate }) => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const onSubmit = () => {
-    const taskDetails = {
-      name,
-      description,
-      priority,
-      category,
-      date: formatDate(selectedDate),
-      startTime: formatTime(startTime),
-      endTime: formatTime(endTime),
-    };
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-    if (editingTask) {
-      onUpdate(editingTask.id, taskDetails);
+    if (startTime >= endTime) {
+      alert("Start time should be less than end time");
     } else {
-      onSubmitTask(taskDetails);
-    }
+      const taskDetails = {
+        name,
+        description,
+        priority,
+        category,
+        date: formatDate(selectedDate),
+        startTime: formatTime(startTime),
+        endTime: formatTime(endTime),
+      };
 
-    setTaskData({ name: "", description: "" });
-    setPriority("");
-    setCategory("");
-    setSelectedDate(new Date());
+      if (editingTask) {
+        onUpdate(editingTask.id, taskDetails);
+      } else {
+        onSubmitTask(taskDetails);
+      }
+
+      setTaskData({ name: "", description: "" });
+      setPriority("");
+      setCategory("");
+      setSelectedDate(new Date());
+      setOverlay(false);
+    }
   };
 
   return (
-    <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-2xl rounded">
+    <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
       <form onSubmit={onSubmit} className="p-8">
         <div className="">
           <label
             className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
               isInputFocused("taskname") || name.length > 0
-                ? "text-[11px] top-[10px]"
+                ? "text-[10px] top-[10px]"
                 : "text-base"
             } transition-all duration-200`}
           >
@@ -257,26 +266,14 @@ const TaskCard = ({ onSubmitTask, editingTask, onUpdate }) => {
         </div>
         <div className="flex justify-end mt-8">
           {editingTask ? (
-            <button
-              onClick={onSubmit}
-              // editingTask={editingTask}
-              type="button"
-              className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-green-400 hover:bg-green-500 transition duration-150 ease-in-out active:bg-green-400 active:text-white"
-            >
-              Edit
-            </button>
+            <Button onClick={onSubmit}>Edit</Button>
           ) : (
-            <button
-              type="submit"
-              className="right-0 text-lg text-[#00214d] font-bold border border-gray-300 hover:border-gray-700 px-6 py-2 rounded bg-[#00ebc7] hover:bg-cyan-500 transition duration-150 ease-in-out active:bg-cyan-400 active:text-white"
-            >
-              Done
-            </button>
+            <Button type="submit">Add Task</Button>
           )}
         </div>
       </form>
     </section>
   );
-};
+});
 
 export default TaskCard;

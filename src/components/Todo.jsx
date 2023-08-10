@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { BgOverlayContext } from "../BgOverlayContext";
 
 import TaskCard from "./TaskCard";
 import TodoList from "./TodoList";
 
 import NoTaskImage from "../assets/task-bg.png";
+import Button from "./Button";
 
 const Todo = () => {
+  const { setOverlay } = useContext(BgOverlayContext);
   const [cardShow, setCardShow] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [storedTaskData, setStoredTaskData] = useState(
@@ -14,6 +17,7 @@ const Todo = () => {
 
   const addTask = () => {
     setCardShow(true);
+    setOverlay(true);
   };
 
   const handleSubmitTask = (taskDetails) => {
@@ -34,16 +38,21 @@ const Todo = () => {
     const editTask = storedTaskData.find((task) => task.id === taskId);
     setEditingTask(editTask);
     setCardShow(true);
+    setOverlay(true);
   };
 
   const onUpdateTask = (taskId, updatedTaskDetails) => {
-    const updatedTaskData = storedTaskData.map((task) =>
-      task.id === taskId ? { ...task, ...updatedTaskDetails } : task
-    );
-    setStoredTaskData(updatedTaskData);
-    localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
-    setEditingTask("");
-    setCardShow(false);
+    if (updatedTaskDetails.startTime >= updatedTaskDetails.endTime) {
+      alert("Start time should be less than end time");
+    } else {
+      const updatedTaskData = storedTaskData.map((task) =>
+        task.id === taskId ? { ...task, ...updatedTaskDetails } : task
+      );
+      setStoredTaskData(updatedTaskData);
+      localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
+      setEditingTask("");
+      setCardShow(false);
+    }
   };
 
   const clearLocalStorage = () => {
@@ -61,14 +70,12 @@ const Todo = () => {
       if (sortValue === "date") {
         sortedTaskData.sort((taskA, taskB) => {
           if (taskA.date === "Today" && taskB.date === "Today") {
-            // If both tasks have "Today" as the date, compare their IDs to maintain order
             return taskA.id - taskB.id;
           } else if (taskA.date === "Today") {
-            return -1; // taskA should come first
+            return -1;
           } else if (taskB.date === "Today") {
-            return 1; // taskB should come first
+            return 1;
           } else {
-            // Compare dates for tasks other than "Today"
             const dateA = new Date(taskA.date);
             const dateB = new Date(taskB.date);
             return dateA - dateB;
@@ -97,23 +104,17 @@ const Todo = () => {
   };
 
   return (
-    <section className={`px-4 mt-8 relative`}>
+    <section className={`px-4 py-8 relative`}>
       <div className="relative max-w-[1000px] mx-auto flex flex-col justify-between">
         <div className="flex justify-between">
-          <button
-            type="button"
-            onClick={addTask}
-            className="px-4 py-2 text-lg text-[#00214d] bg-[#00ebc7] font-semibold rounded hover:bg-cyan-400 cursor-pointer transition duration-150 ease-in-out "
-          >
-            Add New Task
-          </button>
+          <Button onClick={addTask}>Add new task</Button>
           <div className="flex items-center space-x-6 text-gray-700 font-semibold ">
             <form className="flex space-x-3">
               <select
                 name="sort"
                 id="sort"
                 onChange={() => onFilterTasks("sort")}
-                className="cursor-pointer"
+                className="cursor-pointer outline-none"
               >
                 <option value="">Sort</option>
                 <option value="date">Date</option>
