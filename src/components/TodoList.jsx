@@ -3,7 +3,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
 
-const TodoList = ({ task, onDelete, onEdit }) => {
+const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
   const [truncateText, setTruncateText] = useState("");
   const { id, name, startTime, endTime, date } = task;
 
@@ -20,6 +20,7 @@ const TodoList = ({ task, onDelete, onEdit }) => {
       <div className="flex justify-between items-center mb-4">
         <p className="text-xs font-semibold text-gray-700 ">{date}</p>
         <TiTick
+          onClick={() => handleTaskStatus(id)}
           title="Click to complete the task"
           className="text-xl bg-white rounded-full text-green-600 cursor-pointer border border-green-300 hover:border-green-600"
         />

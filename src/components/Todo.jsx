@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BgOverlayContext } from "../BgOverlayContext";
 
 import TaskCard from "./TaskCard";
@@ -15,14 +15,67 @@ const Todo = () => {
     JSON.parse(localStorage.getItem("tasks")) || []
   );
 
+  const updateTaskStatuses = (tasks) => {
+    const currentDate = new Date();
+
+    tasks.forEach((task) => {
+      if (!task.completed && task.date < currentDate) {
+        task.pending = true;
+      }
+    });
+  };
+
+  useEffect(() => {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    if (tasks !== null) {
+      updateTaskStatuses(tasks);
+    }
+
+    const updateInterval = 60 * 60 * 1000; // 1 hour in milliseconds
+    const intervalId = setInterval(() => {
+      updateTaskStatuses(tasks);
+    }, updateInterval);
+
+    // Clean up the timer when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [storedTaskData]);
+
   const addTask = () => {
     setCardShow(true);
     setOverlay(true);
   };
 
+  const handleTaskStatus = (taskDetails) => {
+    const currentDateObj = new Date();
+    const currentDate = new Date(currentDateObj.getDate());
+    const currentTime = new Date(currentDateObj.getHours());
+
+    const { date, endTime } = taskDetails;
+    const taskDate = date === "Today" ? currentDate.toLocaleDateString() : date;
+    const dateTimeString = `${taskDate} ${endTime}`;
+    const dateTime = new Date(dateTimeString);
+    const dateOfTheTask = new Date(dateTime.getDate());
+    const timeOfTheTask = new Date(dateOfTheTask.getHours());
+
+    if (dateOfTheTask > currentDate) {
+      return "Not yet started";
+    } else if (timeOfTheTask < currentTime) {
+      return "OnGoing";
+    } else if (timeOfTheTask > currentTime) {
+      return "Not yet started";
+    }
+  };
+
   const handleSubmitTask = (taskDetails) => {
     const taskId = Date.now();
-    const updatedTaskData = [{ id: taskId, ...taskDetails }, ...storedTaskData];
+    const taskStatus = handleTaskStatus(taskDetails);
+    const updatedTaskData = [
+      { id: taskId, ...taskDetails, taskStatus },
+      ...storedTaskData,
+    ];
     setStoredTaskData(updatedTaskData);
     localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
     setCardShow(false);
@@ -55,20 +108,33 @@ const Todo = () => {
     }
   };
 
+  const onChangeTaskStatus = (taskId) => {
+    const updatedTaskData = [...storedTaskData];
+
+    const taskIndex = updatedTaskData.findIndex((task) => task.id === taskId);
+
+    if (taskIndex !== -1) {
+      updatedTaskData[taskIndex].taskStatus = "completed";
+
+      setStoredTaskData(updatedTaskData);
+      localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
+    }
+  };
+
   const clearLocalStorage = () => {
     localStorage.clear();
     setStoredTaskData([]);
   };
 
   const onFilterTasks = (type) => {
+    let allTaskData = JSON.parse(localStorage.getItem("tasks"));
+
     if (type === "sort") {
       const userSortValue = document.getElementById("sort");
       let sortValue = userSortValue.options[userSortValue.selectedIndex].value;
 
-      let sortedTaskData = [...storedTaskData];
-
       if (sortValue === "date") {
-        sortedTaskData.sort((taskA, taskB) => {
+        allTaskData.sort((taskA, taskB) => {
           if (taskA.date === "Today" && taskB.date === "Today") {
             return taskA.id - taskB.id;
           } else if (taskA.date === "Today") {
@@ -84,7 +150,7 @@ const Todo = () => {
       }
 
       if (sortValue === "aToz") {
-        sortedTaskData.sort((taskA, taskB) => {
+        allTaskData.sort((taskA, taskB) => {
           const nameA = String(taskA.name).toLowerCase();
           const nameB = String(taskB.name).toLowerCase();
           return nameA.localeCompare(nameB);
@@ -92,14 +158,45 @@ const Todo = () => {
       }
 
       if (sortValue === "zToa") {
-        sortedTaskData.sort((taskA, taskB) => {
+        allTaskData.sort((taskA, taskB) => {
           const nameA = String(taskA.name).toLowerCase();
           const nameB = String(taskB.name).toLowerCase();
           return nameB.localeCompare(nameA);
         });
       }
 
-      setStoredTaskData(sortedTaskData);
+      setStoredTaskData(allTaskData);
+    }
+
+    if (type === "priority") {
+      const userPriorityValue = document.getElementById("priority");
+      let priorityValue =
+        userPriorityValue.options[userPriorityValue.selectedIndex].value;
+
+      if (priorityValue === "all") {
+        setStoredTaskData(allTaskData);
+      }
+
+      if (priorityValue === "hard") {
+        const hardTasksData = allTaskData.filter(
+          (task) => task.priority === "hard"
+        );
+        setStoredTaskData(hardTasksData);
+      }
+
+      if (priorityValue === "medium") {
+        const mediumTasksData = allTaskData.filter(
+          (task) => task.priority === "medium"
+        );
+        setStoredTaskData(mediumTasksData);
+      }
+
+      if (priorityValue === "low") {
+        const lowTasksData = allTaskData.filter(
+          (task) => task.priority === "low"
+        );
+        setStoredTaskData(lowTasksData);
+      }
     }
   };
 
@@ -121,15 +218,25 @@ const Todo = () => {
                 <option value="aToz">A-Z</option>
                 <option value="zToa">Z-A</option>
               </select>
-              <select name="priority" id="priority" className="cursor-pointer">
-                <option value="">Filter</option>
+              <select
+                name="priority"
+                id="priority"
+                onChange={() => onFilterTasks("priority")}
+                className="cursor-pointer outline-none"
+              >
+                <option value="all">All</option>
                 <option value="completed">Complete</option>
                 <option value="pending">Pending</option>
                 <option value="hard">Hard</option>
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </select>
-              <select name="category" id="category" className="cursor-pointer">
+              <select
+                name="category"
+                id="category"
+                onChange={() => onFilterTasks("category")}
+                className="cursor-pointer outline-none"
+              >
                 <option value="">Category</option>
                 <option value="personal">Personal</option>
                 <option value="study">Study</option>
@@ -158,6 +265,7 @@ const Todo = () => {
                 onDelete={deleteTask}
                 onEdit={onEditTask}
                 updateTask={onUpdateTask}
+                handleTaskStatus={onChangeTaskStatus}
               />
             ))}
           </div>

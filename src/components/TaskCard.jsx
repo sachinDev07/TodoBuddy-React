@@ -52,8 +52,35 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate }) => {
     setInputFocused(false);
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const compareDatesByDayMonthYear = (dateA, dateB) => {
+    const dayA = dateA.getDate();
+    const monthA = dateA.getMonth();
+    const yearA = dateA.getFullYear();
+
+    const dayB = dateB.getDate();
+    const monthB = dateB.getMonth();
+    const yearB = dateB.getFullYear();
+
+    if (yearA !== yearB) {
+      return yearA - yearB;
+    } else if (monthA !== monthB) {
+      return monthA - monthB;
+    } else {
+      return dayA - dayB;
+    }
+  }
+
+  const handleDateChange = (selectedDate) => {
+    let currentDate = new Date();
+    let comparisonResult = compareDatesByDayMonthYear(
+      selectedDate,
+      currentDate
+    );
+    if (comparisonResult >= 0) {
+      setSelectedDate(selectedDate);
+    } else {
+      alert("Please select a valid date !!!");
+    }
   };
 
   const handlePriority = (selectedPriority) => {
