@@ -281,10 +281,10 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
               Personal
             </span>
             <span
-              onClick={() => handleCategory("work")}
+              onClick={() => handleCategory("study")}
               className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-blue-200 hover:bg-blue-300 active:bg-blue-500 active:text-white"
             >
-              Work
+              Study
             </span>
             <span
               onClick={() => handleCategory("home")}

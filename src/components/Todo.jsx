@@ -6,6 +6,7 @@ import TodoList from "./TodoList";
 
 import NoTaskImage from "../assets/task-bg.png";
 import Button from "./Button";
+import { toast } from "react-toastify";
 
 const Todo = () => {
   const { setOverlay } = useContext(BgOverlayContext);
@@ -14,6 +15,8 @@ const Todo = () => {
   const [storedTaskData, setStoredTaskData] = useState(
     JSON.parse(localStorage.getItem("tasks")) || []
   );
+
+  console.log(storedTaskData);
 
   const updateTaskStatuses = (tasks) => {
     const currentDate = new Date();
@@ -89,7 +92,8 @@ const Todo = () => {
   };
 
   const deleteTask = (taskId) => {
-    const updateTaskData = storedTaskData.filter((t) => t.id !== taskId);
+    const allTaskData = JSON.parse(localStorage.getItem("tasks"));
+    const updateTaskData = allTaskData.filter((t) => t.id !== taskId);
     localStorage.setItem("tasks", JSON.stringify(updateTaskData));
     setStoredTaskData(updateTaskData);
   };
@@ -184,25 +188,118 @@ const Todo = () => {
         setStoredTaskData(allTaskData);
       }
 
-      if (priorityValue === "hard") {
-        const hardTasksData = allTaskData.filter(
-          (task) => task.priority === "hard"
+      if (priorityValue === "high") {
+        const highTaskData = allTaskData.filter(
+          (task) => task.priority === "high"
         );
-        setStoredTaskData(hardTasksData);
+        if (highTaskData.length > 0) {
+          setStoredTaskData(highTaskData);
+        } else {
+          toast.error("None task were found");
+        }
       }
 
       if (priorityValue === "medium") {
-        const mediumTasksData = allTaskData.filter(
+        const mediumTaskData = allTaskData.filter(
           (task) => task.priority === "medium"
         );
-        setStoredTaskData(mediumTasksData);
+        if (mediumTaskData.length > 0) {
+          setStoredTaskData(mediumTaskData);
+        } else {
+          toast.error("None task were found");
+        }
       }
 
       if (priorityValue === "low") {
-        const lowTasksData = allTaskData.filter(
+        const lowTaskData = allTaskData.filter(
           (task) => task.priority === "low"
         );
-        setStoredTaskData(lowTasksData);
+        if (lowTaskData.length > 0) {
+          setStoredTaskData(lowTaskData);
+        } else {
+          toast.error("None task were found");
+        }
+      }
+
+      if (priorityValue === "completed") {
+        const completedTasksData = allTaskData.filter(
+          (task) => task.taskStatus === "completed"
+        );
+        if (completedTasksData.length > 0) {
+          setStoredTaskData(completedTasksData);
+        } else {
+          toast.error("None tasks were completed");
+        }
+      }
+
+      if (priorityValue === "pending") {
+        const pendingTasksData = allTaskData.filter(
+          (task) => task.taskStatus === "pending"
+        );
+
+        if (pendingTasksData.length > 0) {
+          setStoredTaskData(pendingTasksData);
+        } else {
+          toast.error("No pending tasks found");
+        }
+      }
+    }
+
+    if (type === "category") {
+      const userCategory = document.getElementById("category");
+      const userCategoryValue =
+        userCategory.options[userCategory.selectedIndex].value;
+
+      if (userCategoryValue === "category") {
+        setStoredTaskData(allTaskData);
+      }
+
+      if (userCategoryValue === "personal") {
+        let personalTasksData = allTaskData.filter(
+          (task) => task.category === "personal"
+        );
+
+        if (personalTasksData.length > 0) {
+          setStoredTaskData(personalTasksData);
+        } else {
+          toast.error("No tasks found");
+        }
+      }
+
+      if (userCategoryValue === "home") {
+        let workTasksData = allTaskData.filter(
+          (task) => task.category === "home"
+        );
+
+        if (workTasksData.length > 0) {
+          setStoredTaskData(workTasksData);
+        } else {
+          toast.error("No tasks found");
+        }
+      }
+
+      if (userCategoryValue === "study") {
+        let studyTasksData = allTaskData.filter(
+          (task) => task.category === "study"
+        );
+
+        if (studyTasksData.length > 0) {
+          setStoredTaskData(studyTasksData);
+        } else {
+          toast.error("No tasks found");
+        }
+      }
+
+      if (userCategoryValue === "shopping") {
+        let shoppingTasksData = allTaskData.filter(
+          (task) => task.category === "shopping"
+        );
+
+        if (shoppingTasksData.length > 0) {
+          setStoredTaskData(shoppingTasksData);
+        } else {
+          toast.error("No tasks found");
+        }
       }
     }
   };
@@ -239,7 +336,7 @@ const Todo = () => {
                 <option value="all">All</option>
                 <option value="completed">Complete</option>
                 <option value="pending">Pending</option>
-                <option value="hard">Hard</option>
+                <option value="high">High</option>
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
               </select>
@@ -249,7 +346,7 @@ const Todo = () => {
                 onChange={() => onFilterTasks("category")}
                 className="cursor-pointer outline-none"
               >
-                <option value="">Category</option>
+                <option value="category">Category</option>
                 <option value="personal">Personal</option>
                 <option value="study">Study</option>
                 <option value="home">Home</option>
