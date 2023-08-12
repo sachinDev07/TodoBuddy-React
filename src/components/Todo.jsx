@@ -17,12 +17,20 @@ const Todo = () => {
 
   const updateTaskStatuses = (tasks) => {
     const currentDate = new Date();
+    let tasksChanged = false;
 
-    tasks.forEach((task) => {
-      if (!task.completed && task.date < currentDate) {
-        task.pending = true;
+    const updatedTasks = tasks.map((task) => {
+      if (task.taskStatus !== "completed" && task.date < currentDate) {
+        task.taskStatus = "pending";
+        tasksChanged = true;
       }
+      return task;
     });
+
+    if (tasksChanged) {
+      setStoredTaskData(updatedTasks);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    }
   };
 
   useEffect(() => {
@@ -32,12 +40,11 @@ const Todo = () => {
       updateTaskStatuses(tasks);
     }
 
-    const updateInterval = 60 * 60 * 1000; // 1 hour in milliseconds
+    const updateInterval = 60 * 60 * 1000;
     const intervalId = setInterval(() => {
       updateTaskStatuses(tasks);
     }, updateInterval);
 
-    // Clean up the timer when the component unmounts
     return () => {
       clearInterval(intervalId);
     };
@@ -200,6 +207,11 @@ const Todo = () => {
     }
   };
 
+  const onClose = () => {
+    setCardShow(false);
+    setOverlay(false);
+  };
+
   return (
     <section className={`px-4 py-8 relative`}>
       <div className="relative max-w-[1000px] mx-auto flex flex-col justify-between">
@@ -287,6 +299,7 @@ const Todo = () => {
               onSubmitTask={handleSubmitTask}
               editingTask={editingTask}
               onUpdate={onUpdateTask}
+              onClose={onClose}
             />
           </div>
         )}

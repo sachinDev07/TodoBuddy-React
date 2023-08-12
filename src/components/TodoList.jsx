@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
-import { RxCross2 } from "react-icons/rx";
+import CrossButton from "./CrossButton";
 
 const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
   const [truncateText, setTruncateText] = useState("");
@@ -40,10 +40,11 @@ const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
             onClick={() => onEdit(id)}
             className="cursor-pointer font-bold text-lg text-green-700 hover:text-green-600 transition duration-150 ease-in-out"
           />
-          <RxCross2
+          <CrossButton 
             title="Remove"
             onClick={() => onDelete(id)}
-            className="cursor-pointer font-bold text-lg text-red-700 hover:text-red-500 transition duration-150 ease-in-out"
+            size="1.2em"
+            color="red"
           />
         </div>
       </div>

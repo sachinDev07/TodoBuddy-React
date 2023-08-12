@@ -3,8 +3,9 @@ import DatePickerComponent from "./DatePicker";
 import TimePicker from "./TimePicker";
 import Button from "./Button";
 import { BgOverlayContext } from "../BgOverlayContext";
+import CrossButton from "./CrossButton";
 
-const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate }) => {
+const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   const { setOverlay } = useContext(BgOverlayContext);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [priority, setPriority] = useState("");
@@ -68,7 +69,7 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate }) => {
     } else {
       return dayA - dayB;
     }
-  }
+  };
 
   const handleDateChange = (selectedDate) => {
     let currentDate = new Date();
@@ -153,6 +154,14 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate }) => {
   return (
     <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
       <form onSubmit={onSubmit} className="p-8">
+        <div className="flex justify-end">
+          <CrossButton 
+            title="Cut"
+            onClick={onClose}
+            size="1.2em"
+            color="red"
+          />
+        </div>
         <div className="">
           <label
             className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
