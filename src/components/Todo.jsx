@@ -7,6 +7,7 @@ import TodoList from "./TodoList";
 import NoTaskImage from "../assets/task-bg.png";
 import Button from "./Button";
 import { toast } from "react-toastify";
+import SearchTask from "./SearchTask";
 
 const Todo = () => {
   const { setOverlay } = useContext(BgOverlayContext);
@@ -15,8 +16,9 @@ const Todo = () => {
   const [storedTaskData, setStoredTaskData] = useState(
     JSON.parse(localStorage.getItem("tasks")) || []
   );
-
-  console.log(storedTaskData);
+  const [isSearchedInputEmpty, setIsSearchedInputEmpty] = useState(true);
+  const [searchedTaskData, setSearchedTaskData] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const updateTaskStatuses = (tasks) => {
     const currentDate = new Date();
@@ -86,8 +88,8 @@ const Todo = () => {
       { id: taskId, ...taskDetails, taskStatus },
       ...storedTaskData,
     ];
-    setStoredTaskData(updatedTaskData);
     localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
+    setStoredTaskData(JSON.parse(localStorage.getItem("tasks")));
     setCardShow(false);
   };
 
@@ -356,7 +358,14 @@ const Todo = () => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-12 my-2">
+        <div className="flex justify-between items-center mt-12 my-2">
+          <SearchTask
+            storedTaskData={storedTaskData}
+            setStoredTaskData={setStoredTaskData}
+            isEmpty={setIsSearchedInputEmpty}
+            setSearchedData={setSearchedTaskData}
+            setSearchValue={setSearchText}
+          />
           <button
             onClick={clearLocalStorage}
             title="Clear all the tasks"
@@ -366,18 +375,43 @@ const Todo = () => {
           </button>
         </div>
         {storedTaskData.length > 0 ? (
-          <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-2 mb-6 gap-4 overflow-hidden">
-            {storedTaskData?.map((task) => (
-              <TodoList
-                key={task.id}
-                task={task}
-                onDelete={deleteTask}
-                onEdit={onEditTask}
-                updateTask={onUpdateTask}
-                handleTaskStatus={onChangeTaskStatus}
-              />
-            ))}
-          </div>
+          isSearchedInputEmpty === true ? (
+            <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-6 mb-6 gap-4 overflow-hidden">
+              {storedTaskData?.map((task) => (
+                <TodoList
+                  key={task.id}
+                  task={task}
+                  onDelete={deleteTask}
+                  onEdit={onEditTask}
+                  updateTask={onUpdateTask}
+                  handleTaskStatus={onChangeTaskStatus}
+                />
+              ))}
+            </div>
+          ) : (
+            <>
+              {isSearchedInputEmpty === false ? (
+                searchedTaskData.length > 0 ? (
+                  <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-6 mb-6 gap-4 overflow-hidden">
+                    {searchedTaskData?.map((task) => (
+                      <TodoList
+                        key={task.id}
+                        task={task}
+                        onDelete={deleteTask}
+                        onEdit={onEditTask}
+                        updateTask={onUpdateTask}
+                        handleTaskStatus={onChangeTaskStatus}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xl text-gray-600">
+                    {`Sorry, we couldn't find any results for "${searchText}"`}
+                  </p>
+                )
+              ) : null}
+            </>
+          )
         ) : (
           <div className="flex flex-col justify-center items-center bg-white">
             <img src={NoTaskImage} alt="image" className="w-[500px]" />
