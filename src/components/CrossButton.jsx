@@ -9,8 +9,8 @@ const CrossButton = ({ title, onClick, size, color }) => {
       title={title}
       onClick={onClick}
       size={defaultSize}
-      color={defaultColor}
-      className={`cursor-pointer font-bold transition duration-150 ease-in-out`}
+      // color={defaultColor}
+      className={`cursor-pointer font-bold border text-red-500 border-red-400 hover:border-red-600 active:text-white active:bg-red-600 p-1 rounded-full transition duration-150 ease-in-out`}
     />
   );
 };

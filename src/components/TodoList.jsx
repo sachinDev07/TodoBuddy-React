@@ -16,13 +16,13 @@ const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
   }, [name]);
 
   return (
-    <div className="mb-6 max-h-68 md:mb-2 flex flex-col justify-between bg-red-200 p-3 rounded-md shadow-md hover:shadow-lg  overflow-hidden">
+    <div className="mb-6 max-h-68 md:mb-2 flex flex-col justify-between p-3 rounded-md shadow-7xl hover:scale-105 transition duration-150 ease-in-out  overflow-hidden">
       <div className="flex justify-between items-center mb-4">
         <p className="text-xs font-semibold text-gray-700 ">{date}</p>
         <TiTick
           onClick={() => handleTaskStatus(id)}
           title="Click to complete the task"
-          className="text-xl bg-white rounded-full text-green-600 cursor-pointer border border-green-300 hover:border-green-600"
+          className="text-xl bg-white rounded-full text-green-600 cursor-pointer border border-green-300 hover:border-green-600 active:text-white active:bg-green-600 transition duration-150 ease-in-out"
         />
       </div>
       <h1 className={`text-5xl md:text-3xl text-gray-800 font-semibold `}>
@@ -40,10 +40,10 @@ const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
             onClick={() => onEdit(id)}
             className="cursor-pointer font-bold text-lg text-green-700 hover:text-green-600 transition duration-150 ease-in-out"
           />
-          <CrossButton 
+          <CrossButton
             title="Remove"
             onClick={() => onDelete(id)}
-            size="1.2em"
+            size="1.1em"
             color="red"
           />
         </div>

@@ -9,7 +9,7 @@ const Header = () => {
         <img
           src={todobuddyLogo}
           alt="logo"
-          className="w-32 h-16 object-contain cursor-pointer"
+          className="w-40 h-16 object-contain cursor-pointer hover:scale-105 duration-150 ease-in-out"
         />
         <ul className="flex space-x-6">
           <li >

@@ -155,18 +155,13 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
     <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
       <form onSubmit={onSubmit} className="p-8">
         <div className="flex justify-end">
-          <CrossButton 
-            title="Cut"
-            onClick={onClose}
-            size="1.2em"
-            color="red"
-          />
+          <CrossButton title="Cut" onClick={onClose} size="1.2em" color="red" />
         </div>
-        <div className="">
+        <div className="mt-4 relative">
           <label
             className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
               isInputFocused("taskname") || name.length > 0
-                ? "text-[10px] top-[10px]"
+                ? "text-[9px] -top-[17px]"
                 : "text-base"
             } transition-all duration-200`}
           >
@@ -185,11 +180,11 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
             className="w-full mt-1 font-bold outline-none text-lg text-gray-700 border-b-2 border-spacing-x-2 border-gray-300 bg-white transition duration-150 ease-in-out focus:border-gray-700 focus:text-gray-700 mb-6"
           />
         </div>
-        <div className={`${inputFocused === "description" ? "mt-2" : "mt-2"}`}>
+        <div className={`relative`}>
           <label
             className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
               isInputFocused("description") || description.length > 0
-                ? "text-[11px] top-[70px]"
+                ? "text-[9px] -top-[19px]"
                 : "text-base"
             } transition-all duration-200`}
           >

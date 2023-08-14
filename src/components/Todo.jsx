@@ -9,6 +9,8 @@ import Button from "./Button";
 import { toast } from "react-toastify";
 import SearchTask from "./SearchTask";
 
+import NoResultsFound from "../assets/no-results-page.png";
+
 const Todo = () => {
   const { setOverlay } = useContext(BgOverlayContext);
   const [cardShow, setCardShow] = useState(false);
@@ -126,11 +128,15 @@ const Todo = () => {
 
     const taskIndex = updatedTaskData.findIndex((task) => task.id === taskId);
 
-    if (taskIndex !== -1) {
+    if (taskIndex !== -1 && updatedTaskData[taskIndex].taskStatus !== "completed") {
       updatedTaskData[taskIndex].taskStatus = "completed";
 
       setStoredTaskData(updatedTaskData);
       localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
+      toast.success("Congrats, Task is completed")
+    }
+    else {
+      toast.info("Task is already completed !!!")
     }
   };
 
@@ -366,17 +372,13 @@ const Todo = () => {
             setSearchedData={setSearchedTaskData}
             setSearchValue={setSearchText}
           />
-          <button
-            onClick={clearLocalStorage}
-            title="Clear all the tasks"
-            className=" text-gray-700 font-semibold px-2 py-2 bg-gray-300 rounded-md hover:bg-gray-200 active:bg-gray-300 border border-gray-300 transition duration-150 ease-in-out"
-          >
+          <Button onClick={clearLocalStorage} title="Clear all the tasks">
             Clear All
-          </button>
+          </Button>
         </div>
         {storedTaskData.length > 0 ? (
           isSearchedInputEmpty === true ? (
-            <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-6 mb-6 gap-4 overflow-hidden">
+            <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-9 mb-6 gap-4 p-1 overflow-hidden">
               {storedTaskData?.map((task) => (
                 <TodoList
                   key={task.id}
@@ -405,9 +407,13 @@ const Todo = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-xl text-gray-600">
-                    {`Sorry, we couldn't find any results for "${searchText}"`}
-                  </p>
+                  <div className="flex flex-col justify-center items-center absolute  top-[240%] left-[50%] transform -translate-x-1/2 whitespace-nowrap -translate-y-1/2">
+                    <p className=" text-xl text-gray-600">
+                      Sorry, we couldn't find any results for 
+                      <span className="font-bold"> {searchText}</span>
+                    </p>
+                    <img src={NoResultsFound} alt="no result found" />
+                  </div>
                 )
               ) : null}
             </>
