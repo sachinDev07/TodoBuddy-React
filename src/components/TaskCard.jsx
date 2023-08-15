@@ -152,17 +152,17 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   };
 
   return (
-    <section className="relative bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
+    <section className=" bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
       <form onSubmit={onSubmit} className="p-8">
         <div className="flex justify-end">
           <CrossButton title="Cut" onClick={onClose} size="1.2em" color="red" />
         </div>
         <div className="mt-4 relative">
           <label
-            className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
+            className={`absolute text-gray-700 font-bold whitespace-nowrap ${
               isInputFocused("taskname") || name.length > 0
-                ? "text-[9px] -top-[17px]"
-                : "text-base"
+                ? "text-[10px] -top-[15px]"
+                : "text-lg"
             } transition-all duration-200`}
           >
             Task name :
@@ -182,9 +182,9 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
         </div>
         <div className={`relative`}>
           <label
-            className={`absolute text-gray-700 font-bold text-lg whitespace-nowrap ${
+            className={`absolute text-gray-700 font-bold whitespace-nowrap ${
               isInputFocused("description") || description.length > 0
-                ? "text-[9px] -top-[19px]"
+                ? "text-[10px] -top-[15px]"
                 : "text-base"
             } transition-all duration-200`}
           >
@@ -226,30 +226,38 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
         <div className="mt-3 flex justify-between items-center">
           <label className="text-gray-700 font-bold text-lg">Priority</label>
           <div className="flex items-center space-x-4">
-            <p
+            <span className="">High</span>
+            <input
               id="High"
+              type="radio"
+              name="priority"
+              value="high"
+              required
               onClick={() => handlePriority("hard")}
               className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
-            >
-              High
-              <span className="w-4 h-4 rounded-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600"></span>
-            </p>
-            <p
+            />
+
+            <span className="">Medium</span>
+            <input
               id="Medium"
+              type="radio"
+              name="priority"
+              value="medium"
+              required
               onClick={() => handlePriority("medium")}
               className="flex items-center gap-1 text-xm font-semibold text-gray-700 cursor-pointer"
-            >
-              Medium
-              <span className="w-4 h-4 rounded-full bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600"></span>
-            </p>
-            <p
+            />
+
+            <span className="">Low</span>
+            <input
               id="Low"
+              type="radio"
+              name="priority"
+              value="low"
+              required
               onClick={() => handlePriority("low")}
               className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
-            >
-              Low
-              <span className="w-4 h-4 rounded-full bg-gray-400 hover:bg-gray-500 active:bg-gray-600"></span>
-            </p>
+            />
           </div>
         </div>
         <div className="mt-6 flex items-center justify-between">

@@ -16,7 +16,7 @@ const TodoList = ({ task, onDelete, onEdit, handleTaskStatus }) => {
   }, [name]);
 
   return (
-    <div className="mb-6 max-h-68 md:mb-2 flex flex-col justify-between p-3 rounded-md shadow-7xl hover:scale-105 transition duration-150 ease-in-out  overflow-hidden">
+    <div className="mb-6 max-h-68 md:mb-2 flex flex-col justify-between p-3 rounded-md shadow-7xl hover:scale-105 transition duration-150 ease-in-out border-2 border-gray-200 overflow-hidden">
       <div className="flex justify-between items-center mb-4">
         <p className="text-xs font-semibold text-gray-700 ">{date}</p>
         <TiTick
