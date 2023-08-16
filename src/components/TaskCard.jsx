@@ -152,8 +152,8 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   };
 
   return (
-    <section className=" bg-white max-w-[480px] min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
-      <form onSubmit={onSubmit} className="p-8">
+    <section className=" bg-white w-[380px] max-w-[480px] md:min-w-[480px] shadow-slate-800 shadow-2xl rounded-md z-50">
+      <form onSubmit={onSubmit} className="p-4 md:p-8">
         <div className="flex justify-end">
           <CrossButton title="Cut" onClick={onClose} size="1.2em" color="red" />
         </div>
@@ -161,8 +161,8 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
           <label
             className={`absolute text-gray-700 font-bold whitespace-nowrap ${
               isInputFocused("taskname") || name.length > 0
-                ? "text-[10px] -top-[15px]"
-                : "text-lg"
+                ? "text-[10px] -top-[15px] text-gray-400 font-semibold "
+                : "text-lg text-gray-700 font-bold"
             } transition-all duration-200`}
           >
             Task name :
@@ -184,8 +184,8 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
           <label
             className={`absolute text-gray-700 font-bold whitespace-nowrap ${
               isInputFocused("description") || description.length > 0
-                ? "text-[10px] -top-[15px]"
-                : "text-base"
+                ? "text-[10px] -top-[15px] text-gray-400 font-semibold"
+                : "text-base text-gray-700 font-bold"
             } transition-all duration-200`}
           >
             Description :
@@ -204,14 +204,14 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
             focus:border-gray-700"
           />
         </div>
-        <div className="mt-5 flex  space-x-28">
+        <div className="mt-5 flex space-x-12  md:space-x-28">
           <label className="block text-gray-700 font-bold text-lg">Date:</label>
           <DatePickerComponent
             selectedDate={selectedDate}
             handleDateChange={handleDateChange}
           />
         </div>
-        <div className="flex justify-between">
+        <div className="md:flex justify-between">
           <TimePicker
             label="Start Time"
             selectedTime={startTime}
@@ -223,9 +223,9 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
             onTimeChange={handleEndTimeChange}
           />
         </div>
-        <div className="mt-3 flex justify-between items-center">
+        <div className="mt-3 md:flex justify-between items-center">
           <label className="text-gray-700 font-bold text-lg">Priority</label>
-          <div className="flex items-center space-x-4">
+          <div className="mt-2 md:mt-0 flex items-center space-x-4">
             <span className="">High</span>
             <input
               id="High"
@@ -260,9 +260,9 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
             />
           </div>
         </div>
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-6 md:flex items-center justify-between">
           <label className="text-lg font-bold text-gray-700">Tags</label>
-          <div className="flex space-x-4">
+          <div className="mt-2 md:mt-0 flex space-x-2 md:space-x-4 text-center">
             <span className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-purple-200 hover:bg-purple-300 active:bg-purple-500 active:text-white">
               Meeting
             </span>
@@ -274,9 +274,9 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
             </span>
           </div>
         </div>
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-6 md:flex items-center justify-between">
           <label className="text-lg font-bold text-gray-700">Category</label>
-          <div className="flex space-x-4">
+          <div className="flex space-x-2 mt-2 md:mt-0">
             <span
               onClick={() => handleCategory("personal")}
               className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-orange-200 hover:bg-orange-300 active:bg-orange-500 active:text-white"

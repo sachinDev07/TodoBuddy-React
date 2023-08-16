@@ -48,7 +48,7 @@ const SearchTask = ({
   return (
     <>
       <div
-        className={`w-1/2 flex items-center justify-between space-x-3 px-2 border-2  ${
+        className={`md:w-1/2 flex items-center justify-between space-x-3 px-2 border-2  ${
           isFocused ? "border-gray-600" : "border-gray-300"
         } rounded transition duration-150 ease-in-out`}
       >
@@ -64,7 +64,9 @@ const SearchTask = ({
         />
         <button type="button">
           <PiMagnifyingGlass
-            className={`text-lg hover:scale-105 duration-150 ease-in-out ${isFocused ? "text-gray-700 font-semibold" : "text-gray-500"}`}
+            className={`text-lg hover:scale-105 duration-150 ease-in-out ${
+              isFocused ? "text-gray-700 font-semibold" : "text-gray-500"
+            }`}
           />
         </button>
       </div>

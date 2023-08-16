@@ -128,15 +128,17 @@ const Todo = () => {
 
     const taskIndex = updatedTaskData.findIndex((task) => task.id === taskId);
 
-    if (taskIndex !== -1 && updatedTaskData[taskIndex].taskStatus !== "completed") {
+    if (
+      taskIndex !== -1 &&
+      updatedTaskData[taskIndex].taskStatus !== "completed"
+    ) {
       updatedTaskData[taskIndex].taskStatus = "completed";
 
       setStoredTaskData(updatedTaskData);
       localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
-      toast.success("Congrats, Task is completed")
-    }
-    else {
-      toast.info("Task is already completed !!!")
+      toast.success("Congrats, Task is completed");
+    } else {
+      toast.info("Task is already completed !!!");
     }
   };
 
@@ -320,9 +322,9 @@ const Todo = () => {
   return (
     <section className={`px-4 py-8 relative`}>
       <div className="relative max-w-[1000px] mx-auto flex flex-col justify-between">
-        <div className="flex justify-between">
+        <div className="md:flex justify-between">
           <Button onClick={addTask}>Add new task</Button>
-          <div className="flex items-center space-x-6 text-gray-700 font-semibold ">
+          <div className="mt-5 md:mt-0 flex items-center space-x-6 text-gray-700 font-semibold ">
             <form className="flex space-x-3">
               <select
                 name="sort"
@@ -364,7 +366,7 @@ const Todo = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mt-12 my-2">
+        <div className="md:flex justify-between items-center mt-10 md:mt-12 my-2">
           <SearchTask
             storedTaskData={storedTaskData}
             setStoredTaskData={setStoredTaskData}
@@ -372,13 +374,15 @@ const Todo = () => {
             setSearchedData={setSearchedTaskData}
             setSearchValue={setSearchText}
           />
-          <Button onClick={clearLocalStorage} title="Clear all the tasks">
-            Clear All
-          </Button>
+          <div className="mt-6 md:mt-0 text-right">
+            <Button onClick={clearLocalStorage} title="Clear all the tasks">
+              Clear All
+            </Button>
+          </div>
         </div>
         {storedTaskData.length > 0 ? (
           isSearchedInputEmpty === true ? (
-            <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-9 mb-6 gap-4 p-1 overflow-hidden">
+            <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 mt-1 md:mt-9 mb-6 gap-4 p-1 overflow-hidden">
               {storedTaskData?.map((task) => (
                 <TodoList
                   key={task.id}
@@ -409,7 +413,7 @@ const Todo = () => {
                 ) : (
                   <div className="flex flex-col justify-center items-center absolute  top-[240%] left-[50%] transform -translate-x-1/2 whitespace-nowrap -translate-y-1/2">
                     <p className=" text-xl text-gray-600">
-                      Sorry, we couldn't find any results for 
+                      Sorry, we couldn't find any results for
                       <span className="font-bold"> {searchText}</span>
                     </p>
                     <img src={NoResultsFound} alt="no result found" />
