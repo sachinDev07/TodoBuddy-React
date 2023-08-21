@@ -6,6 +6,8 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./components/Login.jsx";
 import Todo from "./components/Todo.jsx";
+import SignIn from "./components/SignUp.jsx";
+import SignUp from "./components/SignUp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,10 @@ const router = createBrowserRouter([
         path: "/todo",
         element: <Todo />,
       },
+      {
+        path: "/sign-up",
+        element: <SignUp />,
+      }
     ],
   },
 ]);
