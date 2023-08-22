@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import todobuddyLogo from "../assets/todobuddy-logo.png";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import { UserPhotoUrlContext } from "../UserPhotoUrlContext";
+import { defaultImage } from "../utils/constant";
 
 const Header = () => {
   const [isloggedIn, setIsLoggedIn] = useState(false);
+  const { photoUrl } = useContext(UserPhotoUrlContext);
   const navigate = useNavigate();
+
   const onLogin = () => {
     setIsLoggedIn((prev) => !prev);
   };
@@ -27,9 +31,9 @@ const Header = () => {
             )}
           </li>
           <img
-            src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+            src={photoUrl ? photoUrl :  defaultImage}
             alt="user image"
-            className="w-7 sm:h-8 md:w-12 md:h-12"
+            className="w-7 rounded-full sm:h-8 md:w-12 md:h-12"
           />
         </ul>
       </nav>

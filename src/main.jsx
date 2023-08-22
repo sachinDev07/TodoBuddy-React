@@ -6,8 +6,8 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./components/Login.jsx";
 import Todo from "./components/Todo.jsx";
-import SignIn from "./components/SignUp.jsx";
 import SignUp from "./components/SignUp.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,15 +20,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/todo",
-        element: <Todo />,
+        element: (
+          <ProtectedRoute>
+            <Todo />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/sign-up",
         element: <SignUp />,
-      }
+      },
     ],
   },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={router} />)
+root.render(<RouterProvider router={router} />);

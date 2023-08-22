@@ -12,7 +12,7 @@ const HomePage = () => {
         Become focused, organized, and calm with Todoist.{" "}
       </p>
       <button
-        onClick={() => navigate("/todo")}
+        onClick={() => navigate("/sign-up")}
         className="mt-10 px-4 py-2 bg-red-500 rounded-md text-white text-lg cursor-pointer font-semibold hover:bg-red-600 transition duration-150 ease-in-out hover:scale-105"
       >
         Start for free

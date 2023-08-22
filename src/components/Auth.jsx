@@ -6,15 +6,19 @@ import { toast } from "react-toastify";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useContext } from "react";
+import { UserPhotoUrlContext } from "../UserPhotoUrlContext";
 
 const Auth = () => {
+  const { setPhotoUrl} = useContext(UserPhotoUrlContext)
   const navigate = useNavigate();
   const onGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log(user);
+      console.log(user.photoURL);
+      setPhotoUrl(user.photoURL)
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 

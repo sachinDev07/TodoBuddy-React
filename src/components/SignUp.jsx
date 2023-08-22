@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
@@ -8,12 +8,15 @@ import { auth, db } from "../config/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Auth from "./Auth";
+import { UserPhotoUrlContext } from "../UserPhotoUrlContext";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setPhotoUrl } = useContext(UserPhotoUrlContext);
 
   const navigate = useNavigate();
 
@@ -32,6 +35,7 @@ const SignUp = () => {
       });
 
       const user = userCredential.user;
+      setPhotoUrl(user.photoURL)
       const userData = { name: name, email: email };
       userData.timestamp = serverTimestamp();
       setDoc(doc(db, "users", user.uid), userData);
@@ -52,7 +56,7 @@ const SignUp = () => {
   return (
     <section>
       <h1 className="text-center mt-6 text-3xl font-bold">Sign In</h1>
-      <div className="flex flex-wrap items-center justify-center my-12 mx-auto max-w-[1000px] px-6">
+      <div className="flex flex-wrap items-center justify-center my-12 mx-auto max-w-6xl px-6">
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img
             src="https://plus.unsplash.com/premium_photo-1661775953246-410e3a33977c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
@@ -90,7 +94,10 @@ const SignUp = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full mb-6 text-xl text-gray-700 bg-white border-2 border-gray-300 px-4 py-2 rounded transition ease-in-out"
               />
-              <div onClick={() => setShowPassword(prev => !prev)} className="absolute top-4 right-4 text-xl cursor-pointer">
+              <div
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute top-4 right-4 text-xl cursor-pointer"
+              >
                 {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
               </div>
             </div>
@@ -120,7 +127,7 @@ const SignUp = () => {
               Sign Up
             </button>
             <div className="flex items-center my-4 before:border-t before:flex-1 before:border-gray-500 after:border-t after:flex-1 after:border-gray-500 mx-4 ">
-             <p className="text-center font-semibold mx-4">OR</p>
+              <p className="text-center font-semibold mx-4">OR</p>
             </div>
             <Auth />
           </form>
