@@ -29,10 +29,6 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
         description: editingTask.description,
       });
 
-      // setSelectedDate(new Date(editingTask.date));
-      // setStartTime(new Date(editingTask.startTime));
-      // setEndTime(new Date(editingTask.endTime));
-
       setPriority(editingTask.priority);
       setCategory(editingTask.category);
     }
