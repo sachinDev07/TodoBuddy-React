@@ -55,7 +55,7 @@ const SignUp = () => {
 
   return (
     <section>
-      <h1 className="text-center mt-6 text-3xl font-bold">Sign In</h1>
+      <h1 className="text-center mt-6 text-3xl font-bold">Sign Up</h1>
       <div className="flex flex-wrap items-center justify-center my-12 mx-auto max-w-6xl px-6">
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img
@@ -113,7 +113,7 @@ const SignUp = () => {
               </p>
               <p>
                 <Link
-                  to={"forgot-password"}
+                  // to={"forgot-password"}
                   className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out"
                 >
                   Forgot password?
