@@ -4,6 +4,7 @@ import TimePicker from "./TimePicker";
 import Button from "./Button";
 import { BgOverlayContext } from "../BgOverlayContext";
 import CrossButton from "./CrossButton";
+import { formatTime, formatDate} from "../utils/helper";
 
 const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   const { setOverlay } = useContext(BgOverlayContext);
@@ -97,25 +98,6 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   };
 
   const isInputFocused = (inputId) => inputId === inputFocused;
-
-  const formatDate = (date) => {
-    const today = new Date();
-    const selected = new Date(date);
-
-    if (selected.toDateString() === today.toDateString()) {
-      return "Today";
-    } else {
-      return selected.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    }
-  };
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
 
   const onSubmit = (e) => {
     e.preventDefault();
