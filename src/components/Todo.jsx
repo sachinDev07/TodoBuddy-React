@@ -67,7 +67,8 @@ const Todo = () => {
   const handleSubmitTask = async (taskDetails) => {
     try {
       console.log("task: ", taskDetails);
-      await addDoc(collection(db, "tasks"), taskDetails);
+      const docRef = await addDoc(collection(db, "tasks"), taskDetails);
+      console.log("taskDetails: ", docRef);
     } catch (error) {
       console.log("error", error);
     }
