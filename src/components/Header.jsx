@@ -23,13 +23,6 @@ const Header = () => {
           className="w-24 md:w-40 object-contain cursor-pointer hover:scale-105 duration-150 ease-in-out"
         />
         <ul className="flex space-x-3 md:space-x-6">
-          <li>
-            {isloggedIn ? (
-              <Button onClick={onLogin}>Log Out</Button>
-            ) : (
-              <Button onClick={onLogin}>Log In</Button>
-            )}
-          </li>
           <img
             src={photoUrl ? photoUrl :  defaultImage}
             alt="user image"

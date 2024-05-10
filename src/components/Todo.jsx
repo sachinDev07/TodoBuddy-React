@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { BgOverlayContext } from "../BgOverlayContext";
+import { collection, addDoc } from "firebase/firestore"; 
+import { db } from "../config/firebase";
 
 import TaskCard from "./TaskCard";
 import TodoList from "./TodoList";
@@ -62,36 +64,13 @@ const Todo = () => {
     setOverlay(true);
   };
 
-  const handleTaskStatus = (taskDetails) => {
-    const currentDateObj = new Date();
-    const currentDate = new Date(currentDateObj.getDate());
-    const currentTime = new Date(currentDateObj.getHours());
-
-    const { date, endTime } = taskDetails;
-    const taskDate = date === "Today" ? currentDate.toLocaleDateString() : date;
-    const dateTimeString = `${taskDate} ${endTime}`;
-    const dateTime = new Date(dateTimeString);
-    const dateOfTheTask = new Date(dateTime.getDate());
-    const timeOfTheTask = new Date(dateOfTheTask.getHours());
-
-    if (dateOfTheTask > currentDate) {
-      return "Not yet started";
-    } else if (timeOfTheTask < currentTime) {
-      return "OnGoing";
-    } else if (timeOfTheTask > currentTime) {
-      return "Not yet started";
+  const handleSubmitTask = async (taskDetails) => {
+    try {
+      console.log("task: ", taskDetails);
+      await addDoc(collection(db, "tasks"), taskDetails);
+    } catch (error) {
+      console.log("error", error);
     }
-  };
-
-  const handleSubmitTask = (taskDetails) => {
-    const taskId = Date.now();
-    const taskStatus = handleTaskStatus(taskDetails);
-    const updatedTaskData = [
-      { id: taskId, ...taskDetails, taskStatus },
-      ...storedTaskData,
-    ];
-    localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
-    setStoredTaskData(JSON.parse(localStorage.getItem("tasks")));
     setCardShow(false);
   };
 

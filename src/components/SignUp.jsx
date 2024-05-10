@@ -101,25 +101,6 @@ const SignUp = () => {
                 {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
               </div>
             </div>
-            <div className="w-full flex justify-between items-center whitespace-nowrap text-sm sm:text-lg">
-              <p>
-                Do you have a account?
-                <Link
-                  to={"/sign-up"}
-                  className="text-red-600 hover:text-red-800 transition duration-200 ease-in-out ml-1"
-                >
-                  Register
-                </Link>
-              </p>
-              <p>
-                <Link
-                  // to={"forgot-password"}
-                  className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out"
-                >
-                  Forgot password?
-                </Link>
-              </p>
-            </div>
             <button
               type="submit"
               className="w-full px-7 py-3 mt-6 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg active:bg-blue-800 uppercase rounded transition duration-200 ease-in-out"
