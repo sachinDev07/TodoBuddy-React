@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { BgOverlayContext } from "../BgOverlayContext";
-import { collection, addDoc } from "firebase/firestore"; 
-import { db } from "../config/firebase";
 
 import TaskCard from "./TaskCard";
 import TodoList from "./TodoList";
@@ -18,7 +16,7 @@ const Todo = () => {
   const [cardShow, setCardShow] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [storedTaskData, setStoredTaskData] = useState(
-    JSON.parse(localStorage.getItem("tasks")) || []
+    JSON.parse(localStorage.getItem("tasks")) || [],
   );
   const [isSearchedInputEmpty, setIsSearchedInputEmpty] = useState(true);
   const [searchedTaskData, setSearchedTaskData] = useState([]);
@@ -64,14 +62,36 @@ const Todo = () => {
     setOverlay(true);
   };
 
-  const handleSubmitTask = async (taskDetails) => {
-    try {
-      console.log("task: ", taskDetails);
-      const docRef = await addDoc(collection(db, "tasks"), taskDetails);
-      console.log("taskDetails: ", docRef);
-    } catch (error) {
-      console.log("error", error);
+  const handleTaskStatus = (taskDetails) => {
+    const currentDateObj = new Date();
+    const currentDate = new Date(currentDateObj.getDate());
+    const currentTime = new Date(currentDateObj.getHours());
+
+    const { date, endTime } = taskDetails;
+    const taskDate = date === "Today" ? currentDate.toLocaleDateString() : date;
+    const dateTimeString = `${taskDate} ${endTime}`;
+    const dateTime = new Date(dateTimeString);
+    const dateOfTheTask = new Date(dateTime.getDate());
+    const timeOfTheTask = new Date(dateOfTheTask.getHours());
+
+    if (dateOfTheTask > currentDate) {
+      return "Not yet started";
+    } else if (timeOfTheTask < currentTime) {
+      return "OnGoing";
+    } else if (timeOfTheTask > currentTime) {
+      return "Not yet started";
     }
+  };
+
+  const handleSubmitTask = (taskDetails) => {
+    const taskId = Date.now();
+    const taskStatus = handleTaskStatus(taskDetails);
+    const updatedTaskData = [
+      { id: taskId, ...taskDetails, taskStatus },
+      ...storedTaskData,
+    ];
+    localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
+    setStoredTaskData(JSON.parse(localStorage.getItem("tasks")));
     setCardShow(false);
   };
 
@@ -94,7 +114,7 @@ const Todo = () => {
       alert("Start time should be less than end time");
     } else {
       const updatedTaskData = storedTaskData.map((task) =>
-        task.id === taskId ? { ...task, ...updatedTaskDetails } : task
+        task.id === taskId ? { ...task, ...updatedTaskDetails } : task,
       );
       setStoredTaskData(updatedTaskData);
       localStorage.setItem("tasks", JSON.stringify(updatedTaskData));
@@ -180,7 +200,7 @@ const Todo = () => {
 
       if (priorityValue === "high") {
         const highTaskData = allTaskData.filter(
-          (task) => task.priority === "high"
+          (task) => task.priority === "high",
         );
         if (highTaskData.length > 0) {
           setStoredTaskData(highTaskData);
@@ -191,7 +211,7 @@ const Todo = () => {
 
       if (priorityValue === "medium") {
         const mediumTaskData = allTaskData.filter(
-          (task) => task.priority === "medium"
+          (task) => task.priority === "medium",
         );
         if (mediumTaskData.length > 0) {
           setStoredTaskData(mediumTaskData);
@@ -202,7 +222,7 @@ const Todo = () => {
 
       if (priorityValue === "low") {
         const lowTaskData = allTaskData.filter(
-          (task) => task.priority === "low"
+          (task) => task.priority === "low",
         );
         if (lowTaskData.length > 0) {
           setStoredTaskData(lowTaskData);
@@ -213,7 +233,7 @@ const Todo = () => {
 
       if (priorityValue === "completed") {
         const completedTasksData = allTaskData.filter(
-          (task) => task.taskStatus === "completed"
+          (task) => task.taskStatus === "completed",
         );
         if (completedTasksData.length > 0) {
           setStoredTaskData(completedTasksData);
@@ -224,7 +244,7 @@ const Todo = () => {
 
       if (priorityValue === "pending") {
         const pendingTasksData = allTaskData.filter(
-          (task) => task.taskStatus === "pending"
+          (task) => task.taskStatus === "pending",
         );
 
         if (pendingTasksData.length > 0) {
@@ -246,7 +266,7 @@ const Todo = () => {
 
       if (userCategoryValue === "personal") {
         let personalTasksData = allTaskData.filter(
-          (task) => task.category === "personal"
+          (task) => task.category === "personal",
         );
 
         if (personalTasksData.length > 0) {
@@ -258,7 +278,7 @@ const Todo = () => {
 
       if (userCategoryValue === "home") {
         let workTasksData = allTaskData.filter(
-          (task) => task.category === "home"
+          (task) => task.category === "home",
         );
 
         if (workTasksData.length > 0) {
@@ -270,7 +290,7 @@ const Todo = () => {
 
       if (userCategoryValue === "study") {
         let studyTasksData = allTaskData.filter(
-          (task) => task.category === "study"
+          (task) => task.category === "study",
         );
 
         if (studyTasksData.length > 0) {
@@ -282,7 +302,7 @@ const Todo = () => {
 
       if (userCategoryValue === "shopping") {
         let shoppingTasksData = allTaskData.filter(
-          (task) => task.category === "shopping"
+          (task) => task.category === "shopping",
         );
 
         if (shoppingTasksData.length > 0) {

@@ -4,7 +4,7 @@ import TimePicker from "./TimePicker";
 import Button from "./Button";
 import { BgOverlayContext } from "../BgOverlayContext";
 import CrossButton from "./CrossButton";
-import { formatTime, formatDate} from "../utils/helper";
+import { formatTime, formatDate } from "../utils/helper";
 
 const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
   const { setOverlay } = useContext(BgOverlayContext);
@@ -72,7 +72,7 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
     let currentDate = new Date();
     let comparisonResult = compareDatesByDayMonthYear(
       selectedDate,
-      currentDate
+      currentDate,
     );
     if (comparisonResult >= 0) {
       setSelectedDate(selectedDate);
@@ -204,52 +204,44 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
         <div className="mt-3 md:flex justify-between items-center">
           <label className="text-gray-700 font-bold text-lg">Priority</label>
           <div className="mt-2 md:mt-0 flex items-center space-x-4">
-            <span className="">High</span>
-            <input
-              id="High"
-              type="radio"
-              name="priority"
-              value="high"
-              required
-              onClick={() => handlePriority("hard")}
-              className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
-            />
+            <label htmlFor="high" className="flex gap-2 items-center">
+              <span>High</span>
+              <input
+                id="high"
+                type="radio"
+                name="priority"
+                value="high"
+                required
+                onClick={() => handlePriority("hard")}
+                className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
+              />
+            </label>
 
-            <span className="">Medium</span>
-            <input
-              id="Medium"
-              type="radio"
-              name="priority"
-              value="medium"
-              required
-              onClick={() => handlePriority("medium")}
-              className="flex items-center gap-1 text-xm font-semibold text-gray-700 cursor-pointer"
-            />
+            <label htmlFor="medium" className="flex gap-2 items-center">
+              <span>Medium</span>
+              <input
+                id="medium"
+                type="radio"
+                name="priority"
+                value="medium"
+                required
+                onClick={() => handlePriority("medium")}
+                className="flex items-center gap-1 text-xm font-semibold text-gray-700 cursor-pointer"
+              />
+            </label>
 
-            <span className="">Low</span>
-            <input
-              id="Low"
-              type="radio"
-              name="priority"
-              value="low"
-              required
-              onClick={() => handlePriority("low")}
-              className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
-            />
-          </div>
-        </div>
-        <div className="mt-6 md:flex items-center justify-between">
-          <label className="text-lg font-bold text-gray-700">Tags</label>
-          <div className="mt-2 md:mt-0 flex space-x-2 md:space-x-4 text-center">
-            <span className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-purple-200 hover:bg-purple-300 active:bg-purple-500 active:text-white">
-              Meeting
-            </span>
-            <span className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-purple-200 hover:bg-purple-300 active:bg-purple-500 active:text-white">
-              UI Desing
-            </span>
-            <span className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-purple-200 hover:bg-purple-300 active:bg-purple-500 active:text-white">
-              Development
-            </span>
+            <label htmlFor="low" className="flex gap-2 items-center">
+              <span>Low</span>
+              <input
+                id="low"
+                type="radio"
+                name="priority"
+                value="low"
+                required
+                onClick={() => handlePriority("low")}
+                className="flex items-center gap-2 text-xm font-semibold text-gray-700 cursor-pointer"
+              />
+            </label>
           </div>
         </div>
         <div className="mt-6 md:flex items-center justify-between">
@@ -257,25 +249,25 @@ const TaskCard = memo(({ onSubmitTask, editingTask, onUpdate, onClose }) => {
           <div className="flex space-x-2 mt-2 md:mt-0">
             <span
               onClick={() => handleCategory("personal")}
-              className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-orange-200 hover:bg-orange-300 active:bg-orange-500 active:text-white"
-            >
+              className={`${category === "personal" ? "border-2 border-orange-700" : ""} text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-orange-200 hover:bg-orange-300 active:bg-orange-500 active:text-white`}
+          >
               Personal
             </span>
             <span
               onClick={() => handleCategory("study")}
-              className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-blue-200 hover:bg-blue-300 active:bg-blue-500 active:text-white"
+              className={`${category === "study" ? "border-2 border-blue-700" : ""} text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-blue-200 hover:bg-blue-300 active:bg-blue-500 active:text-white`}
             >
               Study
             </span>
             <span
               onClick={() => handleCategory("home")}
-              className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-pink-200 hover:bg-pink-300 active:bg-pink-500 active:text-white"
+              className={`${category === "home" ? "border-2 border-pink-700" : ""} text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-pink-200 hover:bg-pink-300 active:bg-pink-500 active:text-white`}
             >
               Home
             </span>
             <span
               onClick={() => handleCategory("shopping")}
-              className="text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-green-200 hover:bg-green-300 active:bg-green-500 active:text-white"
+              className={`${category === "shopping" ? "border-2 border-green-700" : ""} text-xs font-semibold text-gray-700 px-2 py-2 border border-gray-300 rounded transition duration-150 ease-in-out hover:border-gray-700 cursor-pointer bg-green-200 hover:bg-green-300 active:bg-green-500 active:text-white`}
             >
               Shopping
             </span>
