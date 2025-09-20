@@ -1,9 +1,9 @@
 import React from 'react'
 
-const random = () => {
+const randomComponent = () => {
   return (
-    <div>random</div>
+    <div>randomComponent</div>
   )
 }
 
-export default random
+export default randomComponent
