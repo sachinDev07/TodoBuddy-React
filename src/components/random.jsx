@@ -2,7 +2,7 @@ import React from 'react'
 
 const randomComponent = () => {
   return (
-    <div>Something</div>
+    <div>Something new</div>
   )
 }
 
